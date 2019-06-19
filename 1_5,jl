@@ -1,0 +1,24 @@
+using Plots
+
+function makeDoubleMoon(;r=10,w=6,d=3,num=1000)
+    function makeRing(r,w)
+        θ=rand()*π
+        r₀=rand()*w+r-w÷2
+        x=r₀*cos(θ)
+        y=r₀*sin(θ)
+        return x,y
+    end
+    function makeSubRing(r,w,d)
+        θ=rand()*-π
+        r₀=rand()*w+r-w÷2
+        x=r₀*cos(θ)+r
+        y=r₀*sin(θ)-d
+        return x,y
+    end
+    [makeRing(r,w) for _=1:num],
+    [makeSubRing(r,w,d) for _=1:num]
+end
+train_1,train_2=makeDoubleMoon(d=-4)
+@show train_1
+scatter(train_1,label="train 1")
+scatter!(train_2,label="train 2")
