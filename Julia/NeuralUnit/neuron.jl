@@ -18,6 +18,9 @@ end
 
 function update!(n::Neuron{T}, input::Vector{K}, d::Real) where {T <: Real,K <: Real}
     y, ∂y = forward(n, input)
+    if isnothing(∂y)
+        ∂y=one(y)
+    end
     e = d - y
     n.w = n.w + n.η * e * input .* ∂y
     n.b = n.b + n.η * e * ∂y
@@ -26,10 +29,10 @@ end
 
 
 # 生成训练集
-data = [([x,y], x & y) for x ∈ 0:1 for y ∈ 0:1]
+data = [([x,y], x & y==1 ? 1 : -1) for x ∈ 0:1 for y ∈ 0:1]
 # 定义神经元
-sigmoid(x)=1/(1+exp(-x))
-neuron = Neuron(2, 0.3, sigmoid)
+sgn(x)=x>=0 ? 1 : -1
+neuron = Neuron(2, 0.3, sgn)
 # 训练
 for epoch ∈ 1:100
     for (x, y) in data
