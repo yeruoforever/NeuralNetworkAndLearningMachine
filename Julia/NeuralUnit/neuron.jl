@@ -31,7 +31,6 @@ for epoch ∈ 1:10
         loss = update!(neuron, x, y)
         @info loss
         println(neuron)
-        s_x = s_y = range(-3, stop = 3, length = 100)
     end
 end
 
@@ -46,13 +45,14 @@ f(x) = f(x, 0, 0.3)
 Y = f.(X)
 # 定义神经元
 func = Neuron(2, 0.001, identity)
+h(x) = func.w' * [x,x^2] + func.b
 # 训练
 @gif for (x1, x2, y) in zip(X, X.^2, Y)
     loss = update!(func, [x1,x2], y)
     @info loss^2
     plot(X, Y, label = "real")
-    plot!(X, x->func.w' * [x,x^2] + func.b, label = "predict")
+    plot!(X, h, label = "predict")
 end
 # 拟合效果绘图
 plot(X,Y,label = "real")
-plot!(X,x->func.w' * [x,x^2] + func.b,label = "predict")
+plot!(X,h,label = "predict")
