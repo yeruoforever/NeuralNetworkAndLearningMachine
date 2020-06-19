@@ -25,11 +25,11 @@ train_loader=DataLoader(X_train,Y_train,batchsize=128)
 @info "模型配置"
 opt=Descent(0.3)
 ps=params(leNet5)
-
+leNet5(X_train[1])
 
 @info "开始训练"
-for epoch in 1:100
-    @info string("第",epoch,"回合")
+for epoch in 1:10
+    @info string("\t第",epoch,"回合")
     for (x,y) in train_loader
         gs=gradient(ps) do 
             ŷ=leNet5(x)
@@ -56,3 +56,4 @@ function accuracy(model,loader)
     acc=100.0*correct/num
 end
 acc=accuracy(leNet5,test_loader)
+println("accuracy:$(acc)%.")
